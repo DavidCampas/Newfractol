@@ -5,6 +5,9 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
+# include <X11/X.h>
+#include <X11/Xlib.h>
+# include <X11/keysym.h>
 # include "MLX42/mlx.h"
 
 #define ERROR_MESSAGE "Please enter \n\t\"./fractol mandelbrot\" or \n\t\"./fractol julia <value_1. <value_2>\"\n"
@@ -76,26 +79,37 @@ typedef struct	s_fractal
 
 	//Hooks member vble TODO
 	double	escape_value; //hypotenuse
-	int		itertions_definition; //value that increase the image quality
-	
+	int		iterations_definition; //value that increase the image quality
+	double	shift_x;
+	double	shift_y;
+	double	zoom;
+	double	julia_x;
+	double	julia_y;
+
 }	t_fractal;
 
-//***String utils****
+//*** String utils ****
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	ft_putstr_fd(char *s, int fd);
+double	atodbl(char *str);
 
-//***Init***
+//*** Init ***
 void	fractal_init(t_fractal *fractal);
 
-//***Render***
+//*** Render ***
 void	fractal_render(t_fractal *fractal);
 
-//***Math***
+//*** Math ***
 double		fractal_map(double unscaledNum, double minAllowed, double maxAllowed, double min, double max);
 t_complex	fractal_sum_complex(t_complex z1, t_complex z2);
 t_complex	square_complex(t_complex z);
 
+//*** Hooks_events ***
+int			key_handler(int keysym, t_fractal *fractal);
 
+//*** Clean_up ***
+int    	close_handler(t_fractal *fractal);
+int		mouse_handler(int button, int x, int y, t_fractal *fractal);
+int		julia_track(int x, int y, t_fractal *fractal);
 
-//void	draw_pixels(t_image *img, int x, int y, int color);
 #endif

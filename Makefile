@@ -4,6 +4,7 @@ SRCS =	main.c \
 		init.c \
 		math_utils.c \
 		render.c \
+		events.c
 
 # Object files
 OBJS = ${SRCS:.c=.o}

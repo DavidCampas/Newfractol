@@ -26,6 +26,23 @@ static void	my_pixel_put(int x, int y, t_image *img, int color)
 	*(unsigned int *)(img->pixels_ptr + offset) = color;
 }
 
+/*
+ * EASY TOGGLE mandel & julia
+*/
+static void	mandel_vs_julia(t_complex *z, t_complex *c, t_fractal *fractal)
+{	
+	if (!ft_strncmp(fractal->name, "julia", 5))
+	{
+		c->x = fractal->julia_x;
+		c->y = fractal->julia_y;
+	}
+	else
+	{
+		c->x = z->x;
+		c->y = z->y;
+	}
+}
+
 static void	handle_pixel(int x, int y, t_fractal *fractal)
 {
 	t_complex	z;
@@ -34,37 +51,31 @@ static void	handle_pixel(int x, int y, t_fractal *fractal)
 	int			color;
 
 	i = 0;
-	//1 iteration
-	z.x = 0.0;
-	z.y = 0.0;
-	
+		
 	//pixel coordinate x && y scaled to fit mandel
-	c.x = fractal_map(x, 0, WIDTH, -2.0, 2.0);
-	c.y = fractal_map(y, 0, HEIGHT, -2.0, 2.0);
+	z.x = (fractal_map(x, -2, +2, 0, WIDTH) * fractal->zoom) + fractal->shift_x;
+	z.y = (fractal_map(y, +2, -2, 0, HEIGHT) * fractal->zoom) + fractal->shift_y;
 
-	printf(" %d  %d\n", i, fractal->itertions_definition);
+	mandel_vs_julia(&z, &c, fractal);
 	//many times?
-	while (i < fractal->itertions_definition)
+	while (i < fractal->iterations_definition)
 	{
-		printf(" new %d  new %d\n", i, fractal->itertions_definition);
 		//z = z^2 + c
 		z = fractal_sum_complex(square_complex(z), c);
-		
 		//is the value scaped?
+		
 		//if hypo > 2 I assume the point is out
-		if ((z.x *z.x) + (z.y * z.y) > 4)
+		if ((z.x *z.x) + (z.y * z.y) > fractal->escape_value)
 		{
-			printf("estoy haciendo eso\n");
-			color = COLOR_CYAN;
-			//+ (i * 255 / fractal->itertions_definition);
+			color = fractal_map(i, COLOR_BLACK, COLOR_WHITE, 0, fractal->iterations_definition);
 			my_pixel_put(x, y, &fractal->img, color);
 			return ;
 		}
-		i++;
+		++i;
 
 	}
 	//we are in mandelbrot given the iterations
-	//my_pixel_put(x, y, &fractal->img, COLOR_CYAN);
+	my_pixel_put(x, y, &fractal->img, COLOR_RAINBOW);
 }
 void	fractal_render(t_fractal *fractal)
 {
