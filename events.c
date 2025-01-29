@@ -22,21 +22,44 @@ int	close_handler(t_fractal *fractal)
 */
 int	key_handler(int keysym, t_fractal *fractal)
 {
-	if (keysym == XK_Escape)
-		close_handler(fractal);
-	if (keysym == XK_Left)
-		fractal->shift_x += (0.5 * fractal->zoom);	
-	else if (keysym == XK_Right)
-		fractal->shift_x -= (0.5 * fractal->zoom);	
-	else if (keysym == XK_Up)
-		fractal->shift_y -= (0.5 * fractal->zoom);	
-	else if (keysym == XK_Down)
-		fractal->shift_y += (0.5 * fractal->zoom);	
-	else if (keysym == XK_plus)
-		fractal->iterations_definition += 10;
-	else if (keysym == XK_minus)	
-		fractal->iterations_definition -= 10;
+	static int	fractal_checker;
 
+	fractal_checker = 0;
+	if (keysym == XK_Escape)
+	{
+		close_handler(fractal);
+		fractal_checker = 1;
+	}
+	if (keysym == XK_Left)
+	{
+		fractal->shift_x += (0.5 * fractal->zoom);
+		fractal_checker = 1;
+	}
+	else if (keysym == XK_Right)
+	{
+		fractal->shift_x -= (0.5 * fractal->zoom);
+		fractal_checker = 1;
+	}
+	else if (keysym == XK_Up)
+	{
+		fractal->shift_y += (0.5 * fractal->zoom);
+		fractal_checker = 1;
+	}
+	else if (keysym == XK_Down)
+	{
+		fractal->shift_y -= (0.5 * fractal->zoom);
+		fractal_checker = 1;
+	}
+	else if (keysym == XK_plus)
+	{
+		fractal->iterations_definition += 10;
+		fractal_checker = 1;
+	}
+	else if (keysym == XK_minus)	
+	{
+		fractal->iterations_definition -= 10;
+		fractal_checker = 1;
+	}
 	// refresh the image
 	fractal_render(fractal);
 	return 0;
@@ -52,12 +75,12 @@ int	mouse_handler(int button, int x, int y, t_fractal *fractal)
 	//Zoom in
 	if (button == Button5)
 	{
-		fractal->zoom *= 0.95;
+		fractal->zoom *= 1.05;
 	}
 	//Zoom out
 	else if (button == Button4)
 	{
-		fractal->zoom *= 1.05;
+		fractal->zoom *= 0.95;
 	}
 	// refresh
 	fractal_render(fractal);

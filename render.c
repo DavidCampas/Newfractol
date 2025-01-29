@@ -6,7 +6,7 @@
 /*   By: dcampas- <dcampas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 11:58:58 by dcampas-          #+#    #+#             */
-/*   Updated: 2025/01/24 12:54:22 by dcampas-         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:17:19 by dcampas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@ static void	my_pixel_put(int x, int y, t_image *img, int color)
 	*(unsigned int *)(img->pixels_ptr + offset) = color;
 }
 
-/*
- * EASY TOGGLE mandel & julia
-*/
 static void	mandel_vs_julia(t_complex *z, t_complex *c, t_fractal *fractal)
 {	
 	if (!ft_strncmp(fractal->name, "julia", 5))
@@ -53,20 +50,22 @@ static void	handle_pixel(int x, int y, t_fractal *fractal)
 	i = 0;
 		
 	//pixel coordinate x && y scaled to fit mandel
-	z.x = (fractal_map(x, -2, +2, 0, WIDTH) * fractal->zoom) + fractal->shift_x;
-	z.y = (fractal_map(y, +2, -2, 0, HEIGHT) * fractal->zoom) + fractal->shift_y;
-
+	z.x = fractal->shift_x + (x - WIDTH / 2) * (4.0 / WIDTH) * fractal->zoom;
+	z.y = fractal->shift_y + (y - HEIGHT / 2) * (4.0 / HEIGHT) * fractal->zoom;
+	
 	mandel_vs_julia(&z, &c, fractal);
+	
 	//many times?
 	while (i < fractal->iterations_definition)
 	{
 		//z = z^2 + c
 		z = fractal_sum_complex(square_complex(z), c);
 		//is the value scaped?
-		
+		//printf("%f, %f", z.x, z.y);
 		//if hypo > 2 I assume the point is out
 		if ((z.x *z.x) + (z.y * z.y) > fractal->escape_value)
 		{
+			//printf("ENTRA");
 			color = fractal_map(i, COLOR_BLACK, COLOR_WHITE, 0, fractal->iterations_definition);
 			my_pixel_put(x, y, &fractal->img, color);
 			return ;
@@ -75,8 +74,10 @@ static void	handle_pixel(int x, int y, t_fractal *fractal)
 
 	}
 	//we are in mandelbrot given the iterations
-	my_pixel_put(x, y, &fractal->img, COLOR_RAINBOW);
+	my_pixel_put(x, y, &fractal->img, COLOR_PSYCHEDELIC_RED);
 }
+
+/// IMPORTANTE
 void	fractal_render(t_fractal *fractal)
 {
 	int	x;
@@ -91,6 +92,8 @@ void	fractal_render(t_fractal *fractal)
 			handle_pixel(x, y, fractal);
 		}
 	}
+	//if(fractal_checker)
+	//	mlx_destroy_image(fractal->mlx_window, fractal->img.img_ptr);
 	mlx_put_image_to_window(fractal->mlx_connection,
 							fractal->mlx_window,
 							fractal->img.img_ptr,

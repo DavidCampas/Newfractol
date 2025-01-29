@@ -6,7 +6,7 @@
 /*   By: dcampas- <dcampas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 12:21:24 by dcampas-          #+#    #+#             */
-/*   Updated: 2025/01/24 11:22:08 by dcampas-         ###   ########.fr       */
+/*   Updated: 2025/01/29 13:54:28 by dcampas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ static void	data_init(t_fractal *fractal)
 {
 	fractal->escape_value = 4;//2 squared the hypotenise
 	fractal->iterations_definition = 42;
+	fractal->shift_x = 0.0;
+	fractal->shift_y = 0.0;
+	// zoom factor
+	fractal->zoom = 1.0;
 }
 
 static void	events_init(t_fractal *fractal)
