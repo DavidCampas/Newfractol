@@ -6,20 +6,22 @@
 /*   By: dcampas- <dcampas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:08:32 by dcampas-          #+#    #+#             */
-/*   Updated: 2025/01/29 13:31:23 by dcampas-         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:57:49 by dcampas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 // Escala un numero de un rango a otro.
-double	fractal_map(double unscaledNum, double minAllowed, double maxAllowed, double min, double max)
+double	fractal_map(t_scale *params)
 {
-	if (max == min)
+	if (params->max == params->min)
 	{
 		fprintf(stderr, "Error: Division by zero in map function.\n");
-		return (minAllowed);
+		return (params->minallowed);
 	}
-	return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
+	return ((params->maxallowed - params->minallowed)
+		* (params->unscalednum - params->min)
+		/ (params->max - params->min) + params->minallowed);
 }
 
 //SUM complex

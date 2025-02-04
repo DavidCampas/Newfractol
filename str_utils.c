@@ -6,19 +6,18 @@
 /*   By: dcampas- <dcampas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:48:20 by dcampas-          #+#    #+#             */
-/*   Updated: 2025/01/29 14:29:17 by dcampas-         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:53:45 by dcampas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int		ft_strncmp(const char *s1, const char *s2, size_t n)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	if (s1 == NULL || s2 == NULL || n <= 0)
-		return (0);
-	
 	size_t	i;
 
+	if (s1 == NULL || s2 == NULL || n <= 0)
+		return (0);
 	i = 0;
 	if (n == 0)
 		return (0);
