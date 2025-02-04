@@ -11,8 +11,8 @@
 # include "MLX42/mlx.h"
 
 #define ERROR_MESSAGE "Please enter \n\t\"./fractol mandelbrot\" or \n\t\"./fractol julia <value_1> <value_2>\"\n"
-#define HEIGHT	2000
-#define WIDTH	2000
+#define HEIGHT	800
+#define WIDTH	800
 
 //***COLORS***
 #define COLOR_BLACK        0x000000  // Negro

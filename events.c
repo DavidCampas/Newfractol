@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   events.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcampas- <dcampas-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/04 12:43:59 by dcampas-          #+#    #+#             */
+/*   Updated: 2025/02/04 12:43:59 by dcampas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
 /*
@@ -8,9 +20,9 @@
 int	close_handler(t_fractal *fractal)
 {
 	mlx_destroy_image(fractal->mlx_connection,
-					fractal->img.img_ptr);
+				fractal	img.img_ptr);
 	mlx_destroy_window(fractal->mlx_connection,
-						fractal->mlx_window);
+					fractal->mlx_window);
 	mlx_destroy_display(fractal->mlx_connection);
 	free(fractal->mlx_connection);
 	exit(EXIT_SUCCESS);
@@ -22,47 +34,38 @@ int	close_handler(t_fractal *fractal)
 */
 int	key_handler(int keysym, t_fractal *fractal)
 {
-	static int	fractal_checker;
-
 	fractal_checker = 0;
 	if (keysym == XK_Escape)
 	{
 		close_handler(fractal);
-		fractal_checker = 1;
 	}
 	if (keysym == XK_Left)
 	{
 		fractal->shift_x += (0.5 * fractal->zoom);
-		fractal_checker = 1;
 	}
 	else if (keysym == XK_Right)
 	{
 		fractal->shift_x -= (0.5 * fractal->zoom);
-		fractal_checker = 1;
 	}
 	else if (keysym == XK_Up)
 	{
 		fractal->shift_y += (0.5 * fractal->zoom);
-		fractal_checker = 1;
 	}
 	else if (keysym == XK_Down)
 	{
 		fractal->shift_y -= (0.5 * fractal->zoom);
-		fractal_checker = 1;
 	}
 	else if (keysym == XK_plus)
 	{
 		fractal->iterations_definition += 10;
-		fractal_checker = 1;
 	}
-	else if (keysym == XK_minus)	
+	else if (keysym == XK_minus)
 	{
 		fractal->iterations_definition -= 10;
-		fractal_checker = 1;
 	}
-	// refresh the image
+	//Refresh
 	fractal_render(fractal);
-	return 0;
+	return (0);
 }
 
 /*
@@ -94,11 +97,19 @@ int	mouse_handler(int button, int x, int y, t_fractal *fractal)
 */
 int	julia_track(int x, int y, t_fractal *fractal)
 {
-	if (!ft_strncmp(fractal->name, "julia", 5))
+	static int	last_x = 0;
+	static int	last_y = 0;
+
+	if (abs(x - last_x) > 5 || abs(y - last_y) > 5)
 	{
-		fractal->julia_x = (fractal_map(x, -2, +2, 0, WIDTH) * fractal->zoom) + fractal->shift_x;
-		fractal->julia_y = (fractal_map(y, +2, -2, 0, HEIGHT) * fractal->zoom) + fractal->shift_y;
-		fractal_render(fractal);
+		last_x = x;
+		last_y = y;
+		if (!ft_strncmp(fractal->name, "julia", 5))
+		{
+			fractal->julia_x = (fractal_map(x, -2, +2, 0, WIDTH) * fractal->zoom) + fractal->shift_x;
+			fractal->julia_y = (fractal_map(y, +2, -2, 0, HEIGHT) * fractal->zoom) + fractal->shift_y;
+			fractal_render(fractal);
+		}
 	}
 	return 0;
 }
